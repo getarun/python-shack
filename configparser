@@ -1,0 +1,25 @@
+[SectionOne]
+Param1:  Hello
+Param2:  World
+
+[SectionTwo]
+Param1:  ${SectionOne:Param1} ${SectionOne:Param2}
+
+[SectionThree]
+Alpha:   One
+Bravo:   Two
+Charlie: ${Alpha} Mississippi
+
+By setting _interpolation to ExtendedInterpolation() the values become dynamic.
+
+>>> import configparser
+>>> settings = configparser.ConfigParser()
+>>> settings._interpolation = configparser.ExtendedInterpolation()
+>>> settings.read('settings.ini')
+['settings.ini']
+>>> settings.sections()
+['SectionOne', 'SectionTwo', 'SectionThree']
+>>> settings.get('SectionTwo', 'Param1')
+'Hello World'
+>>> settings.get('SectionThree', 'Charlie')
+'One Mississippi'
