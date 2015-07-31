@@ -1,40 +1,17 @@
 import argparse
-parser = argparse.ArgumentParser()
-parser.add_argument("square", type=int,
-                    help="display the square of a given number")
-parser.add_argument("-v", "--verbosity", action="count",
-                    help="increase output verbosity")
+
+parser = argparse.ArgumentParser(description="calculate X to the power of Y")
+group = parser.add_mutually_exclusive_group()
+group.add_argument("-v", "--verbose", action="store_true")
+group.add_argument("-q", "--quiet", action="store_true")
+parser.add_argument("x", type=int, help="the base")
+parser.add_argument("y", type=int, help="the exponent")
 args = parser.parse_args()
-answer = args.square**2
-if args.verbosity == 2:
-    print("the square of {} equals {}".format(args.square, answer))
-elif args.verbosity == 1:
-    print("{}^2 == {}".format(args.square, answer))
-else:
+answer = args.x**args.y
+
+if args.quiet:
     print(answer)
-
-We have introduced another action, “count”, to count the number of occurrences of a specific optional arguments:
-
-$ python3 prog.py 4
-16
-$ python3 prog.py 4 -v
-4^2 == 16
-$ python3 prog.py 4 -vv
-the square of 4 equals 16
-$ python3 prog.py 4 --verbosity --verbosity
-the square of 4 equals 16
-$ python3 prog.py 4 -v 1
-usage: prog.py [-h] [-v] square
-prog.py: error: unrecognized arguments: 1
-$ python3 prog.py 4 -h
-usage: prog.py [-h] [-v] square
-
-positional arguments:
-  square           display a square of a given number
-
-optional arguments:
-  -h, --help       show this help message and exit
-  -v, --verbosity  increase output verbosity
-$ python3 prog.py 4 -vvv
-16
-
+elif args.verbose:
+    print("{} to the power {} equals {}".format(args.x, args.y, answer))
+else:
+    print("{}^{} == {}".format(args.x, args.y, answer))
