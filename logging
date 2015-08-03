@@ -1,0 +1,33 @@
+import logging,os
+name = 'control-3.5'
+
+# create logger
+logger = logging.getLogger('simple_example')
+logger.setLevel(logging.DEBUG)
+
+# create second logger for file-logging
+handler-file = logging.FileHandler(os.path.join('/var/log/', name + '.log'), 'w')
+#
+
+# create syslog handler and set level to debug
+handler-syslog = logging.handlers.SysLogHandler(address=('localhost', 541))
+handler-syslog.setLevel(logging.DEBUG)
+
+
+# create formatter
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+# add formatter to handler
+handler-syslog.setFormatter(formatter)
+handler-file.setFormatter(formatter)
+
+# add handler to logger
+logger.addHandler(handler-syslog)
+logger.addHandler(handler-file)
+
+# 'application' code
+logger.debug('debug message')
+logger.info('info message')
+logger.warn('warn message')
+logger.error('error message')
+logger.critical('critical message')
